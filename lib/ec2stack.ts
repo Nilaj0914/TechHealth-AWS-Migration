@@ -13,8 +13,9 @@ export class Ec2stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Ec2StackProps){
     super(scope, id, props);
 
-    //obtain keypair from AWS account for SSH access
-    const keypairname = 'bastionVM';
+    //import keypair from AWS account for SSH access
+    const KeyPair = ec2.KeyPair.fromKeyPairName(this, 'KeyPair', 'bastionVM');
+
     //Obtain current IP address for SSH access
     const myIP = this.node.tryGetContext('myIP');
 
@@ -70,10 +71,10 @@ export class Ec2stack extends cdk.Stack {
       ec2.Peer.ipv4(`${myIP}/32`),
       ec2.Port.tcp(22),
       "Allow SSH access from my IP")
-    securitygroup.addIngressRule(
+    /*securitygroup.addIngressRule(
       ec2.Peer.ipv4(`${myIP}/32`),
       ec2.Port.tcp(80),
-      "Allow HTTP access from my IP")
+      "Allow HTTP access from my IP")*/
 
     securitygroup.connections.allowFrom(
       AlbSG,
@@ -112,7 +113,7 @@ export class Ec2stack extends cdk.Stack {
           
         userData: instanceUserData,
         securityGroup: securitygroup,
-        keyName: keypairname,
+        keyPair: KeyPair
           
         });
 
