@@ -10,6 +10,7 @@ interface Ec2StackProps extends cdk.StackProps{
 }
 
 export class Ec2stack extends cdk.Stack {
+  public readonly WebServerSG: ec2.SecurityGroup;
   constructor(scope: Construct, id: string, props: Ec2StackProps){
     super(scope, id, props);
 
@@ -64,10 +65,10 @@ export class Ec2stack extends cdk.Stack {
 
   
     //EC2 Security Group
-     const securitygroup = new ec2.SecurityGroup(this, "WebServerSG",{
+     this.WebServerSG = new ec2.SecurityGroup(this, "WebServerSG",{
         vpc: props.vpc,
     })
-    securitygroup.addIngressRule(
+    this.WebServerSG.addIngressRule(
       ec2.Peer.ipv4(`${myIP}/32`),
       ec2.Port.tcp(22),
       "Allow SSH access from my IP")
@@ -76,7 +77,7 @@ export class Ec2stack extends cdk.Stack {
       ec2.Port.tcp(80),
       "Allow HTTP access from my IP")*/
 
-    securitygroup.connections.allowFrom(
+    this.WebServerSG.connections.allowFrom(
       AlbSG,
       ec2.Port.tcp(80),
       "Allow HTTP access from ALB to EC2 instances"
@@ -99,7 +100,10 @@ export class Ec2stack extends cdk.Stack {
     'sudo yum install -y httpd',
     'sudo systemctl start httpd',
     'sudo systemctl enable httpd',
-    `echo "${welcomeMessage}" > /var/www/html/index.html`
+    `echo "${welcomeMessage}" > /var/www/html/index.html`,
+
+    //Install MySQL client for EC2 to RDS connection testing
+    'sudo dnf install mariadb105 -y'
   );
       const instance = new ec2.Instance(this, "Webserver"+[i+1],{
         vpc: props.vpc,
@@ -112,14 +116,18 @@ export class Ec2stack extends cdk.Stack {
           'ap-south-1': 'ami-0861f4e788f5069dd'}),
           
         userData: instanceUserData,
-        securityGroup: securitygroup,
+        securityGroup: this.WebServerSG,
         keyPair: KeyPair
           
         });
 
+        cdk.Tags.of(instance).add('Name', 'TechHealth-WebServer-'+[i+1]);
+
         // Add instance to target group (the loop will allow multiple instances to be added)
         targetGroup.addTarget(new targets.InstanceIdTarget(instance.instanceId));
       };
+
+      
 
       // Output the DNS name of the ALB
       new cdk.CfnOutput(this, "AlbDNS",{
