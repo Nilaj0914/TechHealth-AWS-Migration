@@ -109,6 +109,12 @@ The `--all` flag deploys all stacks defined in the application. The deployment o
 
 After a successful deployment, the CDK will output the DNS name of the Application Load Balancer and the ARN of the RDS secret.
 
+Additionally, when you SSH into one of the EC2 instances, you can also run the following command to test out connection between EC2 instances and the RDS instance (running mysql) using the pre-installed MySQL client.
+
+```bash
+mysql -h Your-RDS-Endpoint -u Your-Username -p
+```
+You will be prompted to enter the password, which can be obtained from AWS Secrets Manager.
 ## Useful CDK Commands
 
 -   `npm run build`: Compile typescript to javascript.
