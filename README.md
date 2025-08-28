@@ -4,13 +4,14 @@ Note: This is a fictional case study for educational and portfolio purposes
 ## Scenario
 You are a Cloud Engineer Consultant working with TechHealth Inc., a healthcare technology company that built their AWS infrastructure manually through the AWS Console 5 years ago. They have a patient portal web application that needs to be modernized and migrated to Infrastructure as Code.
 
-This project uses the AWS Cloud Development Kit (CDK) to define and deploy the necessary cloud infrastructure for the TechHealth's Web application. The infrastructure is designed to be scalable, secure, and highly available, following AWS best practices.
+This project uses the AWS Cloud Development Kit (CDK) to define and deploy the necessary cloud infrastructure for TechHealth's Web application. The infrastructure is designed to be scalable, secure, and highly available, following AWS best practices.
 
 It sets up a custom Virtual Private Cloud (VPC), deploys a fleet of EC2 instances behind an Application Load Balancer to serve the web application, and provisions a secure, multi-AZ RDS MySQL database for data persistence.
 
 ## Table of Contents
 - [Project Intention](#project-intention)
-- [Architecture Overview](#architecture-overview)
+- [Architecture Diagram](#architecture-diagram)
+- [Infrastructure Composition](#Infrastructure-Composition)
 - [Key Features](#key-features)
   - [Custom VPC](#custom-vpc)
   - [High-Availability Web Tier](#high-availability-web-tier)
