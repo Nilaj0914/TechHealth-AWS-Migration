@@ -81,7 +81,7 @@ Before you begin, ensure you have the following installed and configured:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/nilaj0914/techhealth-aws-migration.git](https://github.com/nilaj0914/techhealth-aws-migration.git)
+    git clone https://github.com/nilaj0914/techhealth-aws-migration.git
     cd techhealth-aws-migration
     ```
 
